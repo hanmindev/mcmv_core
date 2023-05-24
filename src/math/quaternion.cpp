@@ -12,8 +12,6 @@ Quaternion::Quaternion(float x, float y, float z, float w) {
     this->w = w;
 }
 
-Quaternion::Quaternion(const Quaternion &q) = default;
-
 Quaternion Quaternion::operator*(const Quaternion &q) const {
     return {
             q.w * this->x + q.x * this->w + q.y * this->z - q.z * this->y,
@@ -35,4 +33,13 @@ Quaternion &Quaternion::operator*=(const Quaternion &q) {
     this->w = w;
 
     return *this;
+}
+
+Quaternion Quaternion::operator-() const {
+    return {
+            -this->x,
+            -this->y,
+            -this->z,
+            this->w
+    };
 }
