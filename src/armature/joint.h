@@ -8,8 +8,6 @@ using namespace std;
 #ifndef MCMV_CORE_JOINT_H
 #define MCMV_CORE_JOINT_H
 
-#endif //MCMV_CORE_JOINT_H
-
 class Joint {
 public:
     string name;
@@ -25,3 +23,5 @@ public:
 
     Joint &operator=(const Joint &j) = default;
 };
+
+#endif //MCMV_CORE_JOINT_H

@@ -3,8 +3,6 @@
 #ifndef MCMV_CORE_EULER_H
 #define MCMV_CORE_EULER_H
 
-#endif //MCMV_CORE_EULER_H
-
 enum class Order
 {   xyz,
     yxz,
@@ -32,3 +30,6 @@ public:
 
     [[nodiscard]] Quaternion to_quaternion() const;
 };
+
+
+#endif //MCMV_CORE_EULER_H

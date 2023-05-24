@@ -1,8 +1,6 @@
 #ifndef MCMV_CORE_QUATERNION_H
 #define MCMV_CORE_QUATERNION_H
 
-#endif //MCMV_CORE_QUATERNION_H
-
 class Quaternion {
 public:
     float x, y, z, w;
@@ -19,3 +17,5 @@ public:
 
     Quaternion &operator=(const Quaternion &q) = default;
 };
+
+#endif //MCMV_CORE_QUATERNION_H

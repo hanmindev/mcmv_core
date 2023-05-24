@@ -3,8 +3,6 @@
 #ifndef MCMV_CORE_VECTOR3_H
 #define MCMV_CORE_VECTOR3_H
 
-#endif //MCMV_CORE_VECTOR3_H
-
 class ZeroScaleException : public std::exception {
 public:
     [[nodiscard]] const char *what() const noexcept override {
@@ -44,3 +42,5 @@ public:
 
     void rotate(const Quaternion &q);
 };
+
+#endif //MCMV_CORE_VECTOR3_H
