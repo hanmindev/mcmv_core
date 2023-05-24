@@ -1,17 +1,12 @@
 #include <cstdlib>
 #include <stdexcept>
 #include "vector3.h"
+#include "quaternion.h"
 
 Vector3::Vector3(float x, float y, float z) {
     this->x = x;
     this->y = y;
     this->z = z;
-}
-
-Vector3::Vector3(const Vector3 &v) {
-    this->x = v.x;
-    this->y = v.y;
-    this->z = v.z;
 }
 
 Vector3 Vector3::operator+(const Vector3 &v) const {
@@ -84,3 +79,11 @@ void Vector3::scale_to(float f) {
     this->z *= s;
 }
 
+void Vector3::rotate(const Quaternion &q) {
+    Quaternion p = {this->x, this->y, this->z, 0};
+    Quaternion q_inv = -q;
+    Quaternion r = q * p * q_inv;
+    this->x = r.x;
+    this->y = r.y;
+    this->z = r.z;
+}

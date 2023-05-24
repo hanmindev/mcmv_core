@@ -1,3 +1,5 @@
+#include "quaternion.h"
+
 #ifndef MCMV_CORE_VECTOR3_H
 #define MCMV_CORE_VECTOR3_H
 
@@ -17,8 +19,6 @@ public:
     Vector3() = default;
 
     Vector3(float x, float y, float z);
-
-    Vector3(const Vector3 &v);
 
     Vector3 operator+(const Vector3 &v) const;
 
@@ -41,4 +41,6 @@ public:
     void normalize();
 
     void scale_to(float f);
+
+    void rotate(const Quaternion &q);
 };
