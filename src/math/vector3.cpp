@@ -80,10 +80,10 @@ void Vector3::scale_to(float f) {
 }
 
 void Vector3::rotate(const Quaternion &q) {
-    Quaternion p = {this->x, this->y, this->z, 0};
-    Quaternion q_inv = -q;
-    Quaternion r = q * p * q_inv;
-    this->x = r.x;
-    this->y = r.y;
-    this->z = r.z;
+  Quaternion p = {this->x, this->y, this->z, 0};
+  Quaternion q_inv = q.conjugated();
+  Quaternion r = q * p * q_inv;
+  this->x = r.x;
+  this->y = r.y;
+  this->z = r.z;
 }

@@ -40,7 +40,9 @@ public:
 
     void scale_to(float f);
 
-    void rotate(const Quaternion &q);
+  void rotate(const Quaternion &q);
+
+  Vector3 rotated(const Quaternion &q) const;
 };
 
 #endif //MCMV_CORE_VECTOR3_H

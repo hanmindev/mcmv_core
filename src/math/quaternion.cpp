@@ -35,7 +35,7 @@ Quaternion &Quaternion::operator*=(const Quaternion &q) {
     return *this;
 }
 
-Quaternion Quaternion::operator-() const {
+Quaternion Quaternion::conjugated() const {
     return {
             -this->x,
             -this->y,

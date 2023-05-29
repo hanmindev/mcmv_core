@@ -9,7 +9,7 @@ public:
 
     Quaternion(float x, float y, float z, float w);
 
-    Quaternion operator-() const;
+  Quaternion conjugated() const;
 
     Quaternion operator*(const Quaternion &q) const;
 
