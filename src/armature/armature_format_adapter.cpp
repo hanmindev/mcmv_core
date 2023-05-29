@@ -67,7 +67,6 @@ void ArmatureFormatAdapter::process_motion_frame(int index) {
   }
 }
 
-
 void ThreadedArmatureFormatAdapter::push_motion_frame(JointMotion *motion_frame) {
   this->motion_frames.push_back(motion_frame);
   this->output_motion_frames.push_back(new JointMotion[this->output_joint_count]);
@@ -76,5 +75,27 @@ void ThreadedArmatureFormatAdapter::push_motion_frame(JointMotion *motion_frame)
 
   thread_pool->queue_job([&index, this]() {
     process_motion_frame(index);
+    {
+      std::unique_lock<std::mutex> lock(frame_mutex);
+      this->processed_frame_count++;
+      frame_cv.notify_all();
+    }
   });
 }
+
+vector<JointMotion *> ArmatureFormatAdapter::get_output_motion_frames() {
+  return this->output_motion_frames;
+}
+
+vector<JointMotion *> ThreadedArmatureFormatAdapter::get_output_motion_frames() {
+  {
+    std::unique_lock<std::mutex> lock(frame_mutex);
+    frame_cv.wait(lock,
+                  [this]() { return this->processed_frame_count == this->output_motion_frames.size() - 1; });
+  }
+  if (processed_frame_count == this->output_motion_frames.size() - 1) {
+    thread_pool->stop();
+    }
+  return this->output_motion_frames;
+}
+
