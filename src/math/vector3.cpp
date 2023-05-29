@@ -87,3 +87,10 @@ void Vector3::rotate(const Quaternion &q) {
   this->y = r.y;
   this->z = r.z;
 }
+
+Vector3 Vector3::rotated(const Quaternion &q) const {
+  Quaternion p = {this->x, this->y, this->z, 0};
+  Quaternion q_inv = q.conjugated();
+  Quaternion r = q * p * q_inv;
+  return {r.x, r.y, r.z};
+}
