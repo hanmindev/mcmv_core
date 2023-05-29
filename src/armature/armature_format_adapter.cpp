@@ -1,12 +1,14 @@
-
 #include <stack>
 #include "armature_format_adapter.h"
+
 ArmatureFormatAdapter::ArmatureFormatAdapter(ProcessorConfig *config) {
   this->input_joint_count = config->input_joint_count;
   this->input_joints = config->input_joints;
   this->output_joint_count = config->output_joint_count;
   this->output_joints = config->output_joints;
   this->input_joint_map = config->input_joint_map;
+  this->output_as_local = config->output_as_local;
+  this->free_frame_after_use = config->free_frame_after_use;
 }
 
 ArmatureFormatAdapter::~ArmatureFormatAdapter() {
@@ -20,7 +22,7 @@ ArmatureFormatAdapter::~ArmatureFormatAdapter() {
 void ArmatureFormatAdapter::push_motion_frame(JointMotion *motion_frame) {
   this->motion_frames.push_back(motion_frame);
   this->output_motion_frames.push_back(new JointMotion[this->output_joint_count]);
-
+  process_motion_frame(this->motion_frames.size() - 1);
 }
 
 void ArmatureFormatAdapter::globalize_motion_frame(JointMotion *motion_frame, Joint *joints, int joint_count) {
@@ -57,6 +59,22 @@ void ArmatureFormatAdapter::process_motion_frame(int index) {
   JointMotion *output_motion_frame = this->output_motion_frames[index];
   globalize_motion_frame(motion_frame, this->input_joints, this->input_joint_count);
   copy_motion_frame(motion_frame, output_motion_frame);
-  localize_motion_frame(output_motion_frame, this->output_joints, this->output_joint_count);
+  if (this->output_as_local) {
+    localize_motion_frame(output_motion_frame, this->output_joints, this->output_joint_count);
+  }
+  if (this->free_frame_after_use) {
+    delete motion_frame;
+  }
+}
 
+
+void ThreadedArmatureFormatAdapter::push_motion_frame(JointMotion *motion_frame) {
+  this->motion_frames.push_back(motion_frame);
+  this->output_motion_frames.push_back(new JointMotion[this->output_joint_count]);
+
+  int index = this->motion_frames.size() - 1;
+
+  thread_pool->queue_job([&index, this]() {
+    process_motion_frame(index);
+  });
 }

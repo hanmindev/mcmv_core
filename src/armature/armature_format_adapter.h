@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include "joint.h"
+#include "../thread_pool/thread_pool.h"
 struct JointMotion {
   Quaternion rotation;
   Vector3 offset;
@@ -16,6 +17,9 @@ struct ProcessorConfig {
   Joint *output_joints;
 
   unordered_map<int, int> *input_joint_map;
+
+  bool output_as_local;
+  bool free_frame_after_use;
 };
 
 class ArmatureFormatAdapter {
@@ -28,19 +32,29 @@ class ArmatureFormatAdapter {
   int input_joint_count;
   Joint *input_joints;
 
-  int output_joint_count;
   Joint *output_joints;
 
   unordered_map<int, int> *input_joint_map;
 
-  vector<JointMotion *> motion_frames;
-  vector<JointMotion *> output_motion_frames;
+  bool output_as_local;
+  bool free_frame_after_use;
 
   static void globalize_motion_frame(JointMotion *motion_frame, Joint *joints, int joint_count);
   void copy_motion_frame(JointMotion *motion_frame, JointMotion *output_motion_frame);
   static void localize_motion_frame(JointMotion *motion_frame, Joint *joints, int joint_count);
-  void process_motion_frame(int index);
 
+ protected:
+  void process_motion_frame(int index);
+  vector<JointMotion *> motion_frames;
+  vector<JointMotion *> output_motion_frames;
+  int output_joint_count;
+};
+
+class ThreadedArmatureFormatAdapter : public ArmatureFormatAdapter {
+ public:
+  void push_motion_frame(JointMotion *motion_frame);
+ private:
+  ThreadPool *thread_pool = new ThreadPool(16);
 };
 
 #endif //MCMV_CORE_SRC_ARMATURE_ARMATURE_FORMAT_ADAPTER_H_
