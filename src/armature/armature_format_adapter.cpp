@@ -99,3 +99,8 @@ vector<JointMotion *> ThreadedArmatureFormatAdapter::get_output_motion_frames() 
   return this->output_motion_frames;
 }
 
+ThreadedArmatureFormatAdapter::ThreadedArmatureFormatAdapter(ProcessorConfig *config)
+    : ArmatureFormatAdapter(config) {
+
+}
+

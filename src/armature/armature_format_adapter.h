@@ -57,6 +57,7 @@ class ArmatureFormatAdapter {
 
 class ThreadedArmatureFormatAdapter : public ArmatureFormatAdapter {
  public:
+  ThreadedArmatureFormatAdapter(ProcessorConfig *p_config);
   void push_motion_frame(JointMotion *motion_frame);
 
   vector<JointMotion *> get_output_motion_frames();
