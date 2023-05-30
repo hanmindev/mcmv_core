@@ -47,7 +47,7 @@ class ArmatureFormatAdapter {
   static void localize_motion_frame(JointMotion *motion_frame, Joint *joints, int joint_count);
 
  protected:
-  void process_motion_frame(int index);
+  void process_motion_frame(JointMotion *motion_frame, JointMotion *output_motion_frame);
   vector<JointMotion *> motion_frames;
   vector<JointMotion *> output_motion_frames;
   int output_joint_count;
@@ -62,9 +62,7 @@ class ThreadedArmatureFormatAdapter : public ArmatureFormatAdapter {
 
   vector<JointMotion *> get_output_motion_frames();
  private:
-  ThreadPool *thread_pool = new ThreadPool(16);
-  std::mutex frame_mutex;
-  std::condition_variable frame_cv;
+  ThreadPool *thread_pool = new ThreadPool(6);
 };
 
 #endif //MCMV_CORE_SRC_ARMATURE_ARMATURE_FORMAT_ADAPTER_H_
