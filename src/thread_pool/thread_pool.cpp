@@ -42,7 +42,7 @@ bool ThreadPool::busy() {
   bool pool_busy;
   {
     std::unique_lock<std::mutex> lock(queue_mutex);
-    pool_busy = jobs.empty();
+    pool_busy = !jobs.empty();
   }
   return pool_busy;
 }
