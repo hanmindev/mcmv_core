@@ -55,16 +55,4 @@ class ArmatureFormatAdapter {
   int processed_frame_count = 0;
 };
 
-class ThreadedArmatureFormatAdapter : public ArmatureFormatAdapter {
- public:
-  ThreadedArmatureFormatAdapter(ProcessorConfig *p_config);
-  void push_motion_frame(JointMotion *motion_frame);
-
-  vector<JointMotion *> get_output_motion_frames();
- private:
-  ThreadPool *thread_pool = new ThreadPool(16);
-  std::mutex frame_mutex;
-  std::condition_variable frame_cv;
-};
-
 #endif //MCMV_CORE_SRC_ARMATURE_ARMATURE_FORMAT_ADAPTER_H_
