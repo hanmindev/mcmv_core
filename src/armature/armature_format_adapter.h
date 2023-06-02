@@ -51,8 +51,6 @@ class ArmatureFormatAdapter {
   vector<JointMotion *> motion_frames;
   vector<JointMotion *> output_motion_frames;
   int output_joint_count;
-
-  int processed_frame_count = 0;
 };
 
 #endif //MCMV_CORE_SRC_ARMATURE_ARMATURE_FORMAT_ADAPTER_H_
