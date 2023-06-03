@@ -20,7 +20,7 @@ void BvhParser::handle_joint() {
     }
     update_token();
     if (this->current_token != tok_offset) {
-      throw std::runtime_error("Expected Offset");
+      throw std::runtime_error("Expected OFFSET");
     }
     update_token();
 
@@ -34,7 +34,7 @@ void BvhParser::handle_joint() {
   }
 
   if (this->current_token != tok_offset) {
-    throw std::runtime_error("Expected Offset or End Site");
+    throw std::runtime_error("Expected OFFSET or End Site");
   }
 
   update_token();
@@ -56,7 +56,7 @@ void BvhParser::handle_joint() {
 
   update_token();
   if (this->current_token != tok_channels) {
-    throw std::runtime_error("Expected Channels");
+    throw std::runtime_error("Expected CHANNELS");
   }
 
   update_token();
@@ -96,21 +96,21 @@ void BvhParser::handle_joint() {
 
   update_token();
   if (this->current_token != tok_l_brace) {
-    throw std::runtime_error("Expected Left Brace");
+    throw std::runtime_error("Expected }");
   }
 
   handle_joint();
 
   update_token();
   if (this->current_token != tok_r_brace) {
-    throw std::runtime_error("Expected Right Brace");
+    throw std::runtime_error("Expected {");
   }
 }
 
 void BvhParser::handle_root() {
   update_token();
   if (this->current_token != tok_root) {
-    throw std::runtime_error("Expected Root");
+    throw std::runtime_error("Expected ROOT");
   }
   update_token();
   if (this->current_token != tok_string) {
@@ -122,14 +122,14 @@ void BvhParser::handle_root() {
 
   update_token();
   if (this->current_token != tok_l_brace) {
-    throw std::runtime_error("Expected Left Brace");
+    throw std::runtime_error("Expected }");
   }
 
   handle_joint();
 
   update_token();
   if (this->current_token != tok_r_brace) {
-    throw std::runtime_error("Expected Right Brace");
+    throw std::runtime_error("Expected {");
   }
 
 }
@@ -137,7 +137,7 @@ void BvhParser::handle_root() {
 void BvhParser::parse_model() {
   update_token();
   if (this->current_token != tok_hierarchy) {
-    throw std::runtime_error("Expected Hierarchy");
+    throw std::runtime_error("Expected HIERARCHY");
   }
   handle_root();
 }
@@ -151,15 +151,16 @@ bool BvhParser::parse() {
   parse_model();
 
   animation_frames->clear();
+  parse_motion();
 
 }
 
 vector<Joint> *BvhParser::get_model() {
-  return nullptr;
+  return model;
 }
 
 vector<JointMotion *> *BvhParser::get_animation_frames() {
-  return new vector<JointMotion *>();
+  return animation_frames;
 }
 
 void BvhParser::update_token() {

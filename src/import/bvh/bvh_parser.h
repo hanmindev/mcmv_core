@@ -44,6 +44,7 @@ class BvhParser {
   void parse_model();
   void handle_root();
   void handle_joint();
+  void parse_motion();
 };
 
 #endif //MCMV_CORE_PARSER_H
