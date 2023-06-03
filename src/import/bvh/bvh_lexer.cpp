@@ -1,18 +1,18 @@
 #include "bvh_lexer.h"
 
-Lexer::Lexer(FileReader *file_reader) {
+BvhLexer::BvhLexer(FileReader *file_reader) {
   this->file_reader = file_reader;
   this->last_char = this->file_reader->read_char();
 
 }
 
-void Lexer::read_char() {
+void BvhLexer::read_char() {
   this->last_char = this->file_reader->read_char();
 }
-Lexer::~Lexer() {
+BvhLexer::~BvhLexer() {
   delete this->file_reader;
 }
-Token Lexer::getToken() {
+BvhToken BvhLexer::get_token() {
   while (isspace(this->last_char)) {
     this->read_char();
   }
@@ -85,6 +85,6 @@ Token Lexer::getToken() {
   return tok_error;
 }
 
-string Lexer::getString() {
+string BvhLexer::get_string() {
   return this->current_string;
 }

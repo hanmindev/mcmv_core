@@ -3,7 +3,7 @@
 
 #include "../file_reader.h"
 
-enum Token {
+enum BvhToken {
   tok_start,
   tok_eof,
   tok_error,
@@ -30,13 +30,13 @@ enum Token {
   tok_dec
 };
 
-class Lexer {
+class BvhLexer {
  public:
-  explicit Lexer(FileReader *file_reader);
-  Token getToken();
-  string getString();
+  explicit BvhLexer(FileReader *file_reader);
+  BvhToken get_token();
+  string get_string();
 
-  ~Lexer();
+  ~BvhLexer();
 
  private:
   FileReader *file_reader;
