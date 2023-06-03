@@ -54,3 +54,6 @@ ThreadPool::ThreadPool(int max_threads) {
     threads.at(i) = std::thread(&ThreadPool::thread_loop, this);
   }
 }
+ThreadPool::~ThreadPool() {
+  stop();
+}

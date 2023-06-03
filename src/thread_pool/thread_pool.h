@@ -10,6 +10,7 @@
 class ThreadPool {
  public:
     explicit ThreadPool(int max_t);
+    ~ThreadPool();
   void queue_job(const std::function<void()>& job);
   void stop();
   bool busy();
