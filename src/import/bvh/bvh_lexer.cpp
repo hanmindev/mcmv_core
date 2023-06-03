@@ -64,10 +64,8 @@ BvhToken BvhLexer::get_token() {
         this->current_string += this->last_char;
         this->read_char();
       }
-      return tok_dec;
-    } else {
-      return tok_int;
     }
+    return tok_number;
   }
   if (this->last_char == '\0') {
     // don't eat the EOF

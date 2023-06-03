@@ -26,8 +26,7 @@ enum BvhToken {
   tok_time,
 
   tok_string,
-  tok_int,
-  tok_dec
+  tok_number
 };
 
 class BvhLexer {
