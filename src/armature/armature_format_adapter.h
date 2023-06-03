@@ -4,11 +4,7 @@
 #include <unordered_map>
 #include "joint.h"
 #include "../thread_pool/thread_pool.h"
-
-struct JointMotion {
-  Quaternion rotation;
-  Vector3 offset;
-};
+#include "../import/armature_importer.h"
 
 struct ProcessorConfig {
   // input and output joints must be topologically sorted
