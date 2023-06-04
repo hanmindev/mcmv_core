@@ -49,22 +49,15 @@ void BvhParser::handle_joint() {
     throw std::runtime_error("Expected OFFSET or End Site");
   }
 
-  update_token();
-
   float offset[3];
 
   for (float &i : offset) {
+    update_token();
     if (this->current_token != tok_number) {
       throw std::runtime_error("Expected Number");
     }
     i = std::stof(this->current_string);
   }
-
-  Vector3 offset_v{
-      offset[0],
-      offset[1],
-      offset[2]
-  };
 
   update_token();
   if (this->current_token != tok_channels) {
@@ -169,19 +162,19 @@ void BvhParser::parse_frame() {
       }
       float value = std::stof(this->current_string);
 
-      if (order[i][j]== ChannelOrder::Xposition) {
+      if (order[i][j] == ChannelOrder::Xposition) {
         joint_motion[i].offset.x = value;
-      } else if (order[i][j]== ChannelOrder::Yposition) {
+      } else if (order[i][j] == ChannelOrder::Yposition) {
         joint_motion[i].offset.y = value;
-      } else if (order[i][j]== ChannelOrder::Zposition) {
+      } else if (order[i][j] == ChannelOrder::Zposition) {
         joint_motion[i].offset.z = value;
-      } else if (order[i][j]== ChannelOrder::Xrotation) {
+      } else if (order[i][j] == ChannelOrder::Xrotation) {
         euler[0] = value;
         euler_order += "X";
-      } else if (order[i][j]== ChannelOrder::Yrotation) {
+      } else if (order[i][j] == ChannelOrder::Yrotation) {
         euler[1] = value;
         euler_order += "Y";
-      } else if (order[i][j]== ChannelOrder::Zrotation) {
+      } else if (order[i][j] == ChannelOrder::Zrotation) {
         euler[2] = value;
         euler_order += "Z";
       }
@@ -240,10 +233,10 @@ bool BvhParser::parse() {
   if (this->current_token != tok_start) {
     throw std::runtime_error("Expected Start");
   }
-  model->clear();
+  model = new vector<Joint>();
   parse_model();
 
-  animation_frames->clear();
+  animation_frames = new vector<JointMotion *>();
   parse_motion();
 
   if (this->current_token != tok_end) {
@@ -264,7 +257,7 @@ void BvhParser::update_token() {
   this->current_string = std::move(this->next_string);
 
   this->next_token = this->lexer->get_token();
-  if (this->next_token == tok_string) {
+  if (this->next_token == tok_string || this->next_token == tok_number) {
     this->next_string = std::move(this->lexer->get_string());
   }
 }
