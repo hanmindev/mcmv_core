@@ -52,7 +52,12 @@ BvhToken BvhLexer::get_token() {
   }
 
   if (isdigit(this->last_char) || this->last_char == '.' || this->last_char == '-') {
-    this->current_string = "";
+    if (this->last_char == '-') {
+      this->current_string = "-";
+      this->read_char();
+    } else {
+      this->current_string = "";
+    }
     while (isdigit(this->last_char)) {
       this->current_string += this->last_char;
       this->read_char();
