@@ -4,11 +4,7 @@
 #include <unordered_map>
 #include "joint.h"
 #include "../thread_pool/thread_pool.h"
-
-struct JointMotion {
-  Quaternion rotation;
-  Vector3 offset;
-};
+#include "../import/armature_importer.h"
 
 struct ProcessorConfig {
   // input and output joints must be topologically sorted
@@ -51,20 +47,6 @@ class ArmatureFormatAdapter {
   vector<JointMotion *> motion_frames;
   vector<JointMotion *> output_motion_frames;
   int output_joint_count;
-
-  int processed_frame_count = 0;
-};
-
-class ThreadedArmatureFormatAdapter : public ArmatureFormatAdapter {
- public:
-  ThreadedArmatureFormatAdapter(ProcessorConfig *p_config);
-  void push_motion_frame(JointMotion *motion_frame);
-
-  vector<JointMotion *> get_output_motion_frames();
- private:
-  ThreadPool *thread_pool = new ThreadPool(16);
-  std::mutex frame_mutex;
-  std::condition_variable frame_cv;
 };
 
 #endif //MCMV_CORE_SRC_ARMATURE_ARMATURE_FORMAT_ADAPTER_H_
