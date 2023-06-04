@@ -41,14 +41,18 @@ class BvhParser {
   bool parse();
 
   void update_token();
-  vector<Joint> *model = nullptr;
-  vector<JointMotion *> *animation_frames = nullptr;
+  vector<Joint> *model = new vector<Joint>();
+  vector<JointMotion *> *animation_frames = new vector<JointMotion *>();
 
   void parse_model();
   void handle_root();
-  void handle_joint();
+  void handle_joint(int parent_index);
   void parse_motion();
   void parse_frame();
+  string handle_spaced_string();
+  void handle_offset(Vector3 &offset);
+  void handle_channels();
+  void handle_end_site();
 };
 
 #endif //MCMV_CORE_PARSER_H

@@ -19,7 +19,7 @@ BvhParser::~BvhParser() {
   delete this->lexer;
 }
 
-void BvhParser::handle_joint() {
+void BvhParser::handle_end_site() {
   update_token();
   if (this->current_token == tok_end) {
     update_token();
@@ -30,23 +30,69 @@ void BvhParser::handle_joint() {
     if (this->current_token != tok_l_brace) {
       throw std::runtime_error("Expected {");
     }
-    update_token();
-    if (this->current_token != tok_offset) {
-      throw std::runtime_error("Expected OFFSET");
-    }
-    update_token();
 
-    // eat three numbers
-    update_token();
-    update_token();
+    Vector3 offset;
+    handle_offset(offset);
+
     update_token();
     if (this->current_token != tok_r_brace) {
       throw std::runtime_error("Expected }");
     }
   }
+}
 
+void BvhParser::handle_joint(int parent_index) {
+  if (this->next_token == tok_end) {
+    handle_end_site();
+    return;
+  }
+
+  update_token();
+  int index = this->model->size();
+
+  if (this->current_token != tok_joint) {
+    throw std::runtime_error("Expected JOINT");
+  }
+
+  model->push_back(Joint(handle_spaced_string(), parent_index, index));
+  Joint &joint = model->back();
+
+  update_token();
+  if (this->current_token != tok_l_brace) {
+    throw std::runtime_error("Expected {");
+  }
+
+  handle_offset(joint.offset);
+
+  handle_channels();
+
+  while (this->next_token == tok_joint || this->next_token == tok_end) {
+    handle_joint(index);
+  }
+
+  update_token();
+  if (this->current_token != tok_r_brace) {
+    throw std::runtime_error("Expected {");
+  }
+}
+
+string BvhParser::handle_spaced_string() {
+  update_token();
+  if (this->current_token != tok_string) {
+    throw std::runtime_error("Expected String");
+  }
+  string joint_name = std::move(this->current_string);
+  while (this->next_token == tok_string) {
+    update_token();
+    joint_name += " " + this->current_string;
+  }
+  return joint_name;
+}
+
+void BvhParser::handle_offset(Vector3 &offset_v) {
+  update_token();
   if (this->current_token != tok_offset) {
-    throw std::runtime_error("Expected OFFSET or End Site");
+    throw std::runtime_error("Expected OFFSET");
   }
 
   float offset[3];
@@ -59,6 +105,15 @@ void BvhParser::handle_joint() {
     i = std::stof(this->current_string);
   }
 
+  offset_v.x = offset[0];
+  offset_v.y = offset[1];
+  offset_v.z = offset[2];
+}
+
+void BvhParser::handle_channels() {
+  order.emplace_back();
+  vector<ChannelOrder> &channel_order = order.back();
+
   update_token();
   if (this->current_token != tok_channels) {
     throw std::runtime_error("Expected CHANNELS");
@@ -69,74 +124,41 @@ void BvhParser::handle_joint() {
     throw std::runtime_error("Expected Number");
   }
   int channel_count = std::stoi(this->current_string);
+  channel_order.resize(channel_count);
 
-  vector<ChannelOrder> channel_order(channel_count);
-  channel_order.shrink_to_fit();
-
-  string channel_name;
   for (int i = 0; i < channel_count; i++) {
     update_token();
     if (this->current_token != tok_string) {
       throw std::runtime_error("Expected String");
     }
-    channel_name = std::move(this->current_string);
-    if (channel_name == "Xposition") {
+    if (this->current_string == "Xposition") {
       channel_order[i] = ChannelOrder::Xposition;
-    } else if (channel_name == "Yposition") {
+    } else if (this->current_string == "Yposition") {
       channel_order[i] = ChannelOrder::Yposition;
-    } else if (channel_name == "Zposition") {
+    } else if (this->current_string == "Zposition") {
       channel_order[i] = ChannelOrder::Zposition;
-    } else if (channel_name == "Xrotation") {
+    } else if (this->current_string == "Xrotation") {
       channel_order[i] = ChannelOrder::Xrotation;
-    } else if (channel_name == "Yrotation") {
+    } else if (this->current_string == "Yrotation") {
       channel_order[i] = ChannelOrder::Yrotation;
-    } else if (channel_name == "Zrotation") {
+    } else if (this->current_string == "Zrotation") {
       channel_order[i] = ChannelOrder::Zrotation;
     } else {
       throw std::runtime_error("Unknown Channel");
     }
   }
 
-  order.push_back(channel_order);
-
-  update_token();
-  if (this->current_token != tok_l_brace) {
-    throw std::runtime_error("Expected }");
-  }
-
-  handle_joint();
-
-  update_token();
-  if (this->current_token != tok_r_brace) {
-    throw std::runtime_error("Expected {");
-  }
 }
 
 void BvhParser::handle_root() {
-  update_token();
-  if (this->current_token != tok_root) {
+  if (this->next_token != tok_root) {
     throw std::runtime_error("Expected ROOT");
   }
-  update_token();
-  if (this->current_token != tok_string) {
-    throw std::runtime_error("Expected Root Name");
-  }
-  string &root_name = this->current_string;
+  // ROOT can be substituted with JOINT with no issues
+  this->next_token = tok_joint;
 
-  model->push_back(Joint(root_name, -1, 0));
-
-  update_token();
-  if (this->current_token != tok_l_brace) {
-    throw std::runtime_error("Expected }");
-  }
-
-  handle_joint();
-
-  update_token();
-  if (this->current_token != tok_r_brace) {
-    throw std::runtime_error("Expected {");
-  }
-
+  // treat it like a joint
+  handle_joint(-1);
 }
 
 void BvhParser::parse_model() {
@@ -233,15 +255,14 @@ bool BvhParser::parse() {
   if (this->current_token != tok_start) {
     throw std::runtime_error("Expected Start");
   }
-  model = new vector<Joint>();
   parse_model();
-
-  animation_frames = new vector<JointMotion *>();
   parse_motion();
 
-  if (this->current_token != tok_end) {
+  update_token();
+  if (this->current_token != tok_eof) {
     throw std::runtime_error("Expected EOF");
   }
+  return true;
 }
 
 vector<Joint> *BvhParser::get_model() {
