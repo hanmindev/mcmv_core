@@ -36,7 +36,6 @@ class BvhParser {
   vector<vector<ChannelOrder>> order;
 
 
-
   int frame_count;
 
   bool parse();

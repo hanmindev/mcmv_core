@@ -13,6 +13,7 @@ const map<string, Order> order_map = {
 
 BvhParser::BvhParser(BvhLexer *lexer) {
   this->lexer = lexer;
+  parse();
 }
 BvhParser::~BvhParser() {
   delete this->lexer;
