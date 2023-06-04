@@ -14,7 +14,7 @@ class ConcurrentItem {
  public:
   ConcurrentItem(T item) : item(item) {}
   T item;
-  mutex mutex;
+  mutex c_mutex;
 };
 
 class IArmatureImporter {
