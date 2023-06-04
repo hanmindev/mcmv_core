@@ -72,7 +72,7 @@ BvhToken BvhLexer::get_token() {
     }
     return tok_number;
   }
-  if (this->last_char == '\0') {
+  if (this->last_char == EOF) {
     // don't eat the EOF
     return tok_eof;
   }
