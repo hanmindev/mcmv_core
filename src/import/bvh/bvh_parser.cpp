@@ -1,4 +1,15 @@
+#include <map>
 #include "bvh_parser.h"
+#include "../../math/euler.h"
+
+const map<string, Order> order_map = {
+    {"XZY", Order::xzy},
+    {"XYZ", Order::xyz},
+    {"YXZ", Order::yxz},
+    {"YZX", Order::yzx},
+    {"ZXY", Order::zxy},
+    {"ZYX", Order::zyx}
+};
 
 BvhParser::BvhParser(BvhLexer *lexer) {
   this->lexer = lexer;
@@ -142,6 +153,87 @@ void BvhParser::parse_model() {
   handle_root();
 }
 
+void BvhParser::parse_frame() {
+  auto *joint_motion = new JointMotion[model->size()];
+
+  for (int i = 0; i < order.size(); i++) {
+    joint_motion[i].offset = Vector3{0, 0, 0};
+    string euler_order;
+    float euler[3];
+
+    for (int j = 0; j < order[i].size(); j++) {
+      update_token();
+      if (this->current_token != tok_number) {
+        throw std::runtime_error("Expected Number");
+      }
+      float value = std::stof(this->current_string);
+
+      if (order[i][j]== ChannelOrder::Xposition) {
+        joint_motion[i].offset.x = value;
+      } else if (order[i][j]== ChannelOrder::Yposition) {
+        joint_motion[i].offset.y = value;
+      } else if (order[i][j]== ChannelOrder::Zposition) {
+        joint_motion[i].offset.z = value;
+      } else if (order[i][j]== ChannelOrder::Xrotation) {
+        euler[0] = value;
+        euler_order += "X";
+      } else if (order[i][j]== ChannelOrder::Yrotation) {
+        euler[1] = value;
+        euler_order += "Y";
+      } else if (order[i][j]== ChannelOrder::Zrotation) {
+        euler[2] = value;
+        euler_order += "Z";
+      }
+    }
+    joint_motion[i].rotation = Euler(order_map.at(euler_order), euler[0], euler[1], euler[2]).to_quaternion();
+  }
+  animation_frames->push_back(joint_motion);
+}
+
+void BvhParser::parse_motion() {
+  update_token();
+  if (this->current_token != tok_motion) {
+    throw std::runtime_error("Expected MOTION");
+  }
+  update_token();
+  if (this->current_token != tok_frames) {
+    throw std::runtime_error("Expected Frames");
+  }
+  update_token();
+  if (this->current_token != tok_colon) {
+    throw std::runtime_error("Expected :");
+  }
+
+  update_token();
+  if (this->current_token != tok_number) {
+    throw std::runtime_error("Expected Number");
+  }
+  frame_count = std::stoi(this->current_string);
+
+  update_token();
+  if (this->current_token != tok_frame) {
+    throw std::runtime_error("Expected Frame");
+  }
+
+  update_token();
+  if (this->current_token != tok_time) {
+    throw std::runtime_error("Expected Time");
+  }
+  update_token();
+  if (this->current_token != tok_colon) {
+    throw std::runtime_error("Expected :");
+  }
+  update_token();
+  if (this->current_token != tok_number) {
+    throw std::runtime_error("Expected Number");
+  }
+  // TODO: handle frame time to get frame rate
+
+  for (int i = 0; i < frame_count; i++) {
+    parse_frame();
+  }
+}
+
 bool BvhParser::parse() {
   update_token();
   if (this->current_token != tok_start) {
@@ -153,6 +245,9 @@ bool BvhParser::parse() {
   animation_frames->clear();
   parse_motion();
 
+  if (this->current_token != tok_end) {
+    throw std::runtime_error("Expected EOF");
+  }
 }
 
 vector<Joint> *BvhParser::get_model() {

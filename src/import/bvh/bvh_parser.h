@@ -35,6 +35,10 @@ class BvhParser {
 
   vector<vector<ChannelOrder>> order;
 
+
+
+  int frame_count;
+
   bool parse();
 
   void update_token();
@@ -45,6 +49,7 @@ class BvhParser {
   void handle_root();
   void handle_joint();
   void parse_motion();
+  void parse_frame();
 };
 
 #endif //MCMV_CORE_PARSER_H
