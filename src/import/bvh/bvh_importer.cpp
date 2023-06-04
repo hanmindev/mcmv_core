@@ -6,9 +6,14 @@ BvhImporter::BvhImporter(const string &file_name) {
     this->bvh_lexer = new BvhLexer(this->bvh_file_reader);
     this->bvh_parser = new BvhParser(this->bvh_lexer);
 }
-ArmatureModel *BvhImporter::get_model() {
-  return nullptr;
+vector<Joint> *BvhImporter::get_model() {
+  return bvh_parser->get_model();
 }
-vector<JointMotion *> BvhImporter::get_animation_frames() {
-  return vector<JointMotion *>();
+vector<JointMotion *> *BvhImporter::get_animation_frames() {
+  return bvh_parser->get_animation_frames();
+}
+BvhImporter::~BvhImporter() {
+  delete this->bvh_file_reader;
+  delete this->bvh_lexer;
+  delete this->bvh_parser;
 }
