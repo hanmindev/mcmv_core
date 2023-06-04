@@ -48,14 +48,14 @@ void BvhParser::handle_joint(int parent_index) {
   }
 
   update_token();
-  int index = this->model->size();
+  int index = this->model.size();
 
   if (this->current_token != tok_joint) {
     throw std::runtime_error("Expected JOINT");
   }
 
-  model->push_back(Joint(handle_spaced_string(), parent_index, index));
-  Joint &joint = model->back();
+  model.push_back(Joint(handle_spaced_string(), parent_index, index));
+  Joint &joint = model.back();
 
   update_token();
   if (this->current_token != tok_l_brace) {
@@ -170,7 +170,7 @@ void BvhParser::parse_model() {
 }
 
 void BvhParser::parse_frame() {
-  auto *joint_motion = new JointMotion[model->size()];
+  auto *joint_motion = new JointMotion[model.size()];
 
   for (int i = 0; i < order.size(); i++) {
     joint_motion[i].offset = Vector3{0, 0, 0};
@@ -203,7 +203,7 @@ void BvhParser::parse_frame() {
     }
     joint_motion[i].rotation = Euler(order_map.at(euler_order), euler[0], euler[1], euler[2]).to_quaternion();
   }
-  animation_frames->push_back(joint_motion);
+  animation_frames.push_back(joint_motion);
 }
 
 void BvhParser::parse_motion() {
@@ -265,11 +265,11 @@ bool BvhParser::parse() {
   return true;
 }
 
-vector<Joint> *BvhParser::get_model() {
+vector<Joint> BvhParser::get_model() {
   return model;
 }
 
-vector<JointMotion *> *BvhParser::get_animation_frames() {
+vector<JointMotion *> BvhParser::get_animation_frames() {
   return animation_frames;
 }
 

@@ -19,8 +19,8 @@ class ConcurrentItem {
 
 class IArmatureImporter {
  public:
-  virtual vector<Joint> *get_model() = 0;
-  virtual vector<JointMotion *> *get_animation_frames() = 0;
+  virtual vector<Joint> get_model() = 0;
+  virtual vector<JointMotion *> get_animation_frames() = 0;
 //  virtual ConcurrentItem<vector<JointMotion *>> *get_concurrent_animation_frames() = 0;
 };
 
