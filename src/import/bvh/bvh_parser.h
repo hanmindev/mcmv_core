@@ -18,8 +18,6 @@ class BvhParser {
  public:
   explicit BvhParser(BvhLexer *lexer);
 
-  ~BvhParser();
-
   vector<Joint> get_model();
 
   vector<JointMotion *> get_animation_frames();

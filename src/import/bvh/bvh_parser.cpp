@@ -15,9 +15,6 @@ BvhParser::BvhParser(BvhLexer *lexer) {
   this->lexer = lexer;
   parse();
 }
-BvhParser::~BvhParser() {
-  delete this->lexer;
-}
 
 void BvhParser::handle_end_site() {
   update_token();
