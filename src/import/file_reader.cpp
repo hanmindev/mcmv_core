@@ -2,7 +2,7 @@
 #include "file_reader.h"
 
 bool FileReader::open_file(string path) {
-    fopen_s(&this->file, path.c_str(), "r");
+  this->file = fopen(path.c_str(), "r");
     return this->file != nullptr;
 }
 

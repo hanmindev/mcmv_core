@@ -4,6 +4,9 @@
 #include <functional>
 #include <mutex>
 #include <queue>
+#include <thread>
+#include <condition_variable>
+
 
 // modified from https://stackoverflow.com/questions/15752659/thread-pooling-in-c11
 
