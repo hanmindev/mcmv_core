@@ -18,11 +18,9 @@ class BvhParser {
  public:
   explicit BvhParser(BvhLexer *lexer);
 
-  ~BvhParser();
+  vector<Joint> get_model();
 
-  vector<Joint> *get_model();
-
-  vector<JointMotion *> *get_animation_frames();
+  vector<JointMotion *> get_animation_frames();
 
  private:
   BvhToken current_token = tok_eof;
@@ -41,14 +39,18 @@ class BvhParser {
   bool parse();
 
   void update_token();
-  vector<Joint> *model = nullptr;
-  vector<JointMotion *> *animation_frames = nullptr;
+  vector<Joint> model;
+  vector<JointMotion *> animation_frames;
 
   void parse_model();
   void handle_root();
-  void handle_joint();
+  void handle_joint(int parent_index);
   void parse_motion();
   void parse_frame();
+  string handle_spaced_string();
+  void handle_offset(Vector3 &offset);
+  void handle_channels();
+  void handle_end_site();
 };
 
 #endif //MCMV_CORE_PARSER_H

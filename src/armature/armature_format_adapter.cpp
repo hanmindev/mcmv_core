@@ -1,22 +1,41 @@
 #include <stack>
 #include "armature_format_adapter.h"
 
-ArmatureFormatAdapter::ArmatureFormatAdapter(ProcessorConfig *config) {
-  this->input_joint_count = config->input_joint_count;
-  this->input_joints = config->input_joints;
-  this->output_joint_count = config->output_joint_count;
-  this->output_joints = config->output_joints;
-  this->input_joint_map = config->input_joint_map;
-  this->output_as_local = config->output_as_local;
-  this->free_frame_after_use = config->free_frame_after_use;
+unordered_map<int, int> build_joint_map(vector<Joint> input_joints,
+                                        vector<Joint> output_joints,
+                                        unordered_map<string, string> string_joint_map) {
+  unordered_map<int, int> joint_map;
+  // not ideal but it works
+  for (int i = 0; i < output_joints.size(); i++) {
+    auto &output_joint = output_joints[i];
+    auto input_joint_name = string_joint_map[output_joint.name];
+    for (int j = 0; j < input_joints.size(); j++) {
+      auto &input_joint = input_joints[j];
+      if (input_joint.name == input_joint_name) {
+        joint_map[i] = j;
+        break;
+      }
+    }
+  }
+  return joint_map;
+}
+
+ArmatureFormatAdapter::ArmatureFormatAdapter(ProcessorConfig &config) {
+  this->input_joints = std::move(config.input_joints);
+  this->output_joints = std::move(config.output_joints);
+  this->input_joint_map = std::move(config.input_joint_map);
+
+  this->output_as_local = config.output_as_local;
+  this->free_frame_after_use = config.free_frame_after_use;
+  this->output_joint_count = this->output_joints.size();
 }
 
 ArmatureFormatAdapter::~ArmatureFormatAdapter() {
   for (auto &motion_frame : this->motion_frames) {
-    delete motion_frame;
+    delete[] motion_frame;
   }
   for (auto &motion_frame : this->output_motion_frames) {
-    delete motion_frame;
+    delete[] motion_frame;
   }
 }
 void ArmatureFormatAdapter::push_motion_frame(JointMotion *motion_frame) {
@@ -25,9 +44,9 @@ void ArmatureFormatAdapter::push_motion_frame(JointMotion *motion_frame) {
   process_motion_frame(this->motion_frames.size() - 1);
 }
 
-void ArmatureFormatAdapter::globalize_motion_frame(JointMotion *motion_frame, Joint *joints, int joint_count) {
+void ArmatureFormatAdapter::globalize_motion_frame(JointMotion *motion_frame, vector<Joint> joints) {
   // we can do it in one pass because the input joints are topologically sorted
-  for (int i = 1; i < joint_count; i++) {
+  for (int i = 1; i < joints.size(); i++) {
     int parent_index = joints[i].parent_index;
     motion_frame[i].offset =
         motion_frame[parent_index].offset + motion_frame[i].offset.rotated(motion_frame[parent_index].rotation);
@@ -35,9 +54,9 @@ void ArmatureFormatAdapter::globalize_motion_frame(JointMotion *motion_frame, Jo
   }
 }
 
-void ArmatureFormatAdapter::localize_motion_frame(JointMotion *motion_frame, Joint *joints, int joint_count) {
+void ArmatureFormatAdapter::localize_motion_frame(JointMotion *motion_frame, vector<Joint> joints) {
   // we can do it in one pass because the input joints are topologically sorted
-  for (int i = joint_count - 1; i > 0; i--) {
+  for (int i = joints.size() - 1; i > 0; i--) {
     int parent_index = joints[i].parent_index;
     motion_frame[i].offset =
         (motion_frame[i].offset
@@ -48,7 +67,7 @@ void ArmatureFormatAdapter::localize_motion_frame(JointMotion *motion_frame, Joi
 
 void ArmatureFormatAdapter::copy_motion_frame(JointMotion *motion_frame, JointMotion *output_motion_frame) {
   for (int i = 0; i < this->output_joint_count; i++) {
-    int input_index = this->input_joint_map->at(i);
+    int input_index = this->input_joint_map.at(i);
     output_motion_frame[i].offset = motion_frame[input_index].offset;
     output_motion_frame[i].rotation = motion_frame[input_index].rotation;
   }
@@ -57,10 +76,10 @@ void ArmatureFormatAdapter::copy_motion_frame(JointMotion *motion_frame, JointMo
 void ArmatureFormatAdapter::process_motion_frame(int index) {
   JointMotion *motion_frame = this->motion_frames[index];
   JointMotion *output_motion_frame = this->output_motion_frames[index];
-  globalize_motion_frame(motion_frame, this->input_joints, this->input_joint_count);
+  globalize_motion_frame(motion_frame, this->input_joints);
   copy_motion_frame(motion_frame, output_motion_frame);
   if (this->output_as_local) {
-    localize_motion_frame(output_motion_frame, this->output_joints, this->output_joint_count);
+    localize_motion_frame(output_motion_frame, this->output_joints);
   }
   if (this->free_frame_after_use) {
     delete motion_frame;

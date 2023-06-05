@@ -9,9 +9,6 @@ BvhLexer::BvhLexer(FileReader *file_reader) {
 void BvhLexer::read_char() {
   this->last_char = this->file_reader->read_char();
 }
-BvhLexer::~BvhLexer() {
-  delete this->file_reader;
-}
 BvhToken BvhLexer::get_token() {
   while (isspace(this->last_char)) {
     this->read_char();
@@ -52,7 +49,12 @@ BvhToken BvhLexer::get_token() {
   }
 
   if (isdigit(this->last_char) || this->last_char == '.' || this->last_char == '-') {
-    this->current_string = "";
+    if (this->last_char == '-') {
+      this->current_string = "-";
+      this->read_char();
+    } else {
+      this->current_string = "";
+    }
     while (isdigit(this->last_char)) {
       this->current_string += this->last_char;
       this->read_char();
@@ -67,7 +69,7 @@ BvhToken BvhLexer::get_token() {
     }
     return tok_number;
   }
-  if (this->last_char == '\0') {
+  if (this->last_char == EOF) {
     // don't eat the EOF
     return tok_eof;
   }

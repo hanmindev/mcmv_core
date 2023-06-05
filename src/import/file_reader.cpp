@@ -2,7 +2,7 @@
 #include "file_reader.h"
 
 bool FileReader::open_file(string path) {
-    fopen_s(&this->file, path.c_str(), "r");
+  this->file = fopen(path.c_str(), "r");
     return this->file != nullptr;
 }
 
@@ -16,6 +16,7 @@ void FileReader::fill_buffer() {
 FileReader::FileReader(string path) {
     this->path = std::move(path);
     this->buffer_index = BUFFER_SIZE;
+    this->remaining_buffer = 0;
     if (!this->open_file(this->path)) {
         throw std::runtime_error("Could not open file " + this->path);
     }

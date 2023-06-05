@@ -7,10 +7,10 @@
 class BvhImporter : IArmatureImporter {
  public:
   explicit BvhImporter(const string &file_name);
-  ~BvhImporter() override;
+  ~BvhImporter();
 
-  vector<Joint> *get_model() override;
-  vector<JointMotion *> *get_animation_frames() override;
+  vector<Joint> get_model() override;
+  vector<JointMotion *> get_animation_frames() override;
 
  private:
   FileReader *bvh_file_reader;
