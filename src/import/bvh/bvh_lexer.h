@@ -35,8 +35,6 @@ class BvhLexer {
   BvhToken get_token();
   string get_string();
 
-  ~BvhLexer();
-
  private:
   FileReader *file_reader;
   char last_char = ' ';

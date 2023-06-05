@@ -18,6 +18,11 @@ BBImporter::BBImporter(const string &file_name, string root_name) {
   bb_parser = new BBParser(data, std::move(root_name));
 }
 
+BBImporter::~BBImporter() {
+    delete bb_parser;
+}
+
+
 vector<Joint> BBImporter::get_model() {
   return bb_parser->get_model();
 }
