@@ -1,6 +1,25 @@
 #include <stack>
 #include "armature_format_adapter.h"
 
+unordered_map<int, int> build_joint_map(vector<Joint> input_joints,
+                                        vector<Joint> output_joints,
+                                        unordered_map<string, string> string_joint_map) {
+  unordered_map<int, int> joint_map;
+  // not ideal but it works
+  for (int i = 0; i < output_joints.size(); i++) {
+    auto &output_joint = output_joints[i];
+    auto input_joint_name = string_joint_map[output_joint.name];
+    for (int j = 0; j < input_joints.size(); j++) {
+      auto &input_joint = input_joints[j];
+      if (input_joint.name == input_joint_name) {
+        joint_map[i] = j;
+        break;
+      }
+    }
+  }
+  return joint_map;
+}
+
 ArmatureFormatAdapter::ArmatureFormatAdapter(ProcessorConfig &config) {
   this->input_joints = std::move(config.input_joints);
   this->output_joints = std::move(config.output_joints);

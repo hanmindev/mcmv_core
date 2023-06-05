@@ -17,6 +17,9 @@ struct ProcessorConfig {
   bool free_frame_after_use;
 };
 
+// map of output joint index to input joint index
+unordered_map<int, int> build_joint_map(vector<Joint> input_joints, vector<Joint> output_joints, unordered_map<string, string> string_joint_map);
+
 class ArmatureFormatAdapter {
  public:
   explicit ArmatureFormatAdapter(ProcessorConfig &config);
