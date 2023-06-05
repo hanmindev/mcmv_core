@@ -27,6 +27,7 @@ ArmatureFormatAdapter::ArmatureFormatAdapter(ProcessorConfig &config) {
 
   this->output_as_local = config.output_as_local;
   this->free_frame_after_use = config.free_frame_after_use;
+  this->output_joint_count = this->output_joints.size();
 }
 
 ArmatureFormatAdapter::~ArmatureFormatAdapter() {
