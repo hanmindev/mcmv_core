@@ -31,9 +31,15 @@ void BedrockExporter::export_armature_animation(string path, string name, Export
   }
   j["animations"]["animation."s + name + "new"s]["description"]["identifier"] = bones;
 
-    ofstream o(path + "\\" + name + ".animation.json");
-    o << j.dump(4);
-    o.close();
+  std::filesystem::path pl(path);
+
+  std::filesystem::create_directories(pl);
+
+  pl.append(name + ".animation.json");
+
+  ofstream o(pl);
+  o << j.dump(4);
+  o.close();
 }
 
 BedrockExporter::BedrockExporter(vector<Joint> joints, vector<JointMotion *> motion_frames) {
