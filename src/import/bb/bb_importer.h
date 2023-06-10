@@ -9,6 +9,8 @@ class BBImporter : IArmatureImporter {
   explicit BBImporter(const string &file_name);
   explicit BBImporter(const string &file_name, string root_name);
 
+  ~BBImporter();
+
   vector<Joint> get_model() override;
   vector<JointMotion *> get_animation_frames() override;
 
