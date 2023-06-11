@@ -8,7 +8,8 @@ void BedrockExporter::export_armature_animation(string path, string name, Export
 
   j["format_version"] = "1.8.0";
 
-  json bones;
+  json &bones = j["animations"]["animation."s + name + ".new"s]["bones"];
+  bones = {};
 
   for (auto &joint : joints) {
     json bone;
@@ -29,7 +30,6 @@ void BedrockExporter::export_armature_animation(string path, string name, Export
 
     bones[joint.name] = bone;
   }
-  j["animations"]["animation."s + name + "new"s]["description"]["identifier"] = bones;
 
   std::filesystem::path pl(path);
 

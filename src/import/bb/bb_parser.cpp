@@ -4,6 +4,7 @@
 #include <utility>
 BBParser::BBParser(json data) {
   this->model_root = std::move(data["outliner"][0]);
+  parse();
 }
 
 json find_outliner(json &data, string &root_name) {
@@ -41,7 +42,7 @@ bool BBParser::parse() {
 }
 
 void BBParser::parse_model_node(json &node, int index, int parent_index, Vector3 parent_global_offset) {
-  auto name = node["name"];
+  string name = node["name"].get<string>();
   auto children = node["children"];
   auto origin = node["origin"];
   auto rotation = node["rotation"];
@@ -65,7 +66,10 @@ void BBParser::parse_model_node(json &node, int index, int parent_index, Vector3
   model.push_back(joint);
 
   for (auto &child : children) {
-    parse_model_node(child, index + 1, index, global_offset);
+    bool is_joint = !child.is_string();
+    if (is_joint) {
+      parse_model_node(child, index + 1, index, global_offset);
+    }
   }
 }
 
