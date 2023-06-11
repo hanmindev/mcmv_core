@@ -38,10 +38,11 @@ add_executable(
         m_test
         tests/functional/f_line.cpp
         ${SOURCE_FILES}
-)
+        tests/helper/helper.h tests/manual/m_line.cpp)
 target_link_libraries(
         m_test PRIVATE
         GTest::gtest_main
+        GTest::gmock_main
         nlohmann_json::nlohmann_json
 )
 
