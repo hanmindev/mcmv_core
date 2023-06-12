@@ -23,10 +23,15 @@ BBImporter::~BBImporter() {
 }
 
 
-vector<Joint> BBImporter::get_model() {
-  return bb_parser->get_model();
+Model BBImporter::get_model() {
+  return Model {
+      bb_parser->get_model()
+  };
 }
 
-vector<JointMotion *> BBImporter::get_animation_frames() {
-    return {};
+Animation BBImporter::get_animation() {
+    return Animation {
+        {},
+        0
+    };
 }
