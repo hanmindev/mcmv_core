@@ -40,6 +40,7 @@ class ArmatureFormatAdapter {
   static void globalize_motion_frame(JointMotion *motion_frame, Model model);
   void copy_motion_frame(JointMotion *motion_frame, JointMotion *output_motion_frame);
   static void localize_motion_frame(JointMotion *motion_frame, Model model);
+  void special(JointMotion *motion_frame, Model model);
 
  protected:
   void process_motion_frame(int index);
