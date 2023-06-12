@@ -18,11 +18,13 @@ void BedrockExporter::export_armature_animation(string path, string name, Export
     json position;
 
     for (int i = 0; i < motion_frames.size(); i++) {
-      auto &motion_frame = motion_frames[i];
+      auto &motion_frame = motion_frames[i][joint.index];
       string frame_name = std::to_string(i / config.fps);
-      Euler e = Euler(Order::zyx, motion_frame->rotation);
-      rotation[frame_name] = {e.x, e.y, e.z};
-      position[frame_name] = {motion_frame->offset.x, motion_frame->offset.y, motion_frame->offset.z};
+      Euler e = Euler(Order::zyx, motion_frame.rotation);
+
+      // I have no idea why we need these negative signs, but it works
+      rotation[frame_name] = {-e.x, -e.y, e.z};
+      position[frame_name] = {-motion_frame.offset.x, motion_frame.offset.y, motion_frame.offset.z};
     }
 
     bone["rotation"] = rotation;
