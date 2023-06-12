@@ -20,7 +20,7 @@ class BBParser {
   bool parse();
   void parse_model();
 
-  void parse_model_node(json &node, int index, int parent_index, Vector3 parent_global_offset);
+  void parse_model_node(json &node, int parent_index, Vector3 parent_global_offset);
 };
 
 #endif //MCMV_CORE_SRC_IMPORT_BB_BB_PARSER_H_

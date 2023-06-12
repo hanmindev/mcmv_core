@@ -9,6 +9,7 @@ BvhLexer::BvhLexer(FileReader *file_reader) {
 void BvhLexer::read_char() {
   this->last_char = this->file_reader->read_char();
 }
+
 BvhToken BvhLexer::get_token() {
   while (isspace(this->last_char)) {
     this->read_char();

@@ -30,3 +30,7 @@ vector<Joint> BBImporter::get_model() {
 vector<JointMotion *> BBImporter::get_animation_frames() {
     return {};
 }
+
+BBImporter::~BBImporter() {
+    delete bb_parser;
+}

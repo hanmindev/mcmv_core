@@ -8,13 +8,23 @@ unordered_map<int, int> build_joint_map(vector<Joint> input_joints,
   // not ideal but it works
   for (int i = 0; i < output_joints.size(); i++) {
     auto &output_joint = output_joints[i];
-    auto input_joint_name = string_joint_map[output_joint.name];
+    auto input_joint_i = string_joint_map.find(output_joint.name);
+    if (input_joint_i == string_joint_map.end()) {
+      throw std::runtime_error("Joint '" + output_joint.name + "' from output joints not found in map");
+    }
+
+    bool found = false;
+
     for (int j = 0; j < input_joints.size(); j++) {
       auto &input_joint = input_joints[j];
-      if (input_joint.name == input_joint_name) {
+      if (input_joint.name == input_joint_i->second) {
         joint_map[i] = j;
+        found = true;
         break;
       }
+    }
+    if (!found) {
+      throw std::runtime_error("Joint '" + input_joint_i->second + "' not found in input joints");
     }
   }
   return joint_map;

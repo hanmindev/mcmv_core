@@ -4,6 +4,7 @@
 #include <utility>
 BBParser::BBParser(json data) {
   this->model_root = std::move(data["outliner"][0]);
+  parse();
 }
 
 json find_outliner(json &data, string &root_name) {
@@ -40,11 +41,12 @@ bool BBParser::parse() {
   return true;
 }
 
-void BBParser::parse_model_node(json &node, int index, int parent_index, Vector3 parent_global_offset) {
-  auto name = node["name"];
+void BBParser::parse_model_node(json &node, int parent_index, Vector3 parent_global_offset) {
+  string name = node["name"].get<string>();
   auto children = node["children"];
   auto origin = node["origin"];
   auto rotation = node["rotation"];
+  int index = this->model.size();
 
   Vector3 global_offset = parent_global_offset;
   if (!origin.is_null()) {
@@ -58,17 +60,20 @@ void BBParser::parse_model_node(json &node, int index, int parent_index, Vector3
     rot = {Euler(Order::zyx, rotation[0].get<float>(), rotation[1].get<float>(), rotation[2].get<float>()).to_quaternion()};
   }
 
-  auto joint = Joint(name, parent_index, index);
+  auto joint = Joint(name, parent_index, this->model.size());
   joint.offset = global_offset - parent_global_offset;
   joint.rotation = rot;
 
   model.push_back(joint);
 
   for (auto &child : children) {
-    parse_model_node(child, index + 1, index, global_offset);
+    bool is_joint = !child.is_string();
+    if (is_joint) {
+      parse_model_node(child, index, global_offset);
+    }
   }
 }
 
 void BBParser::parse_model() {
-  parse_model_node(model_root, 0, -1, Vector3());
+  parse_model_node(model_root, -1, Vector3());
 }
