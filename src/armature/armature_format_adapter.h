@@ -8,8 +8,8 @@
 
 struct ProcessorConfig {
   // input and output joints must be topologically sorted
-  vector<Joint> input_joints;
-  vector<Joint> output_joints;
+  Model input_model;
+  Model output_model;
 
   unordered_map<int, int> input_joint_map;
 
@@ -18,7 +18,7 @@ struct ProcessorConfig {
 };
 
 // map of output joint index to input joint index
-unordered_map<int, int> build_joint_map(vector<Joint> input_joints, vector<Joint> output_joints, unordered_map<string, string> string_joint_map);
+unordered_map<int, int> build_joint_map(Model &input_model, Model &output_model, unordered_map<string, string> string_joint_map);
 
 class ArmatureFormatAdapter {
  public:
@@ -26,25 +26,25 @@ class ArmatureFormatAdapter {
   ~ArmatureFormatAdapter();
   void push_motion_frame(JointMotion motion_frame[]);
 
-  vector<JointMotion *> get_output_motion_frames();
+  Animation get_animation();
 
  private:
-  vector<Joint> input_joints;
-  vector<Joint> output_joints;
+  Model input_model;
+  Model output_model;
 
   unordered_map<int, int> input_joint_map;
 
   bool output_as_local;
   bool free_frame_after_use;
 
-  static void globalize_motion_frame(JointMotion *motion_frame, vector<Joint> joints);
+  static void globalize_motion_frame(JointMotion *motion_frame, Model model);
   void copy_motion_frame(JointMotion *motion_frame, JointMotion *output_motion_frame);
-  static void localize_motion_frame(JointMotion *motion_frame, vector<Joint> joints);
+  static void localize_motion_frame(JointMotion *motion_frame, Model model);
 
  protected:
   void process_motion_frame(int index);
-  vector<JointMotion *> motion_frames;
-  vector<JointMotion *> output_motion_frames;
+  Animation animation;
+  Animation output_animation;
   int output_joint_count;
 };
 

@@ -12,7 +12,7 @@ TEST(Manual, Curved_Line) {
   BvhImporter bvh_importer(DATA_PATH + "curved_line.bvh");
 
   auto bvh_model = bvh_importer.get_model();
-  auto bvh_animation = bvh_importer.get_animation_frames();
+  auto bvh_animation = bvh_importer.get_animation();
 
   BBImporter bb_importer(DATA_PATH + "curved_line.bbmodel");
 
@@ -34,11 +34,12 @@ TEST(Manual, Curved_Line) {
 
   auto af = ArmatureFormatAdapter(config);
 
-  for (auto &frame : bvh_animation) {
+  for (auto &frame : bvh_animation.frames) {
     af.push_motion_frame(frame);
   }
 
-  auto be = BedrockExporter(bb_model, af.get_output_motion_frames());
+  auto of = af.get_animation();
+  auto be = BedrockExporter(bb_model, of);
 
   ExporterConfig ec = {
       60,
@@ -51,7 +52,7 @@ TEST(Manual, Forked_Line) {
   BvhImporter bvh_importer(DATA_PATH + "forked_line.bvh");
 
   auto bvh_model = bvh_importer.get_model();
-  auto bvh_animation = bvh_importer.get_animation_frames();
+  auto bvh_animation = bvh_importer.get_animation();
 
   BBImporter bb_importer(DATA_PATH + "forked_line.bbmodel");
 
@@ -75,11 +76,12 @@ TEST(Manual, Forked_Line) {
 
   auto af = ArmatureFormatAdapter(config);
 
-  for (auto &frame : bvh_animation) {
+  for (auto &frame : bvh_animation.frames) {
     af.push_motion_frame(frame);
   }
 
-  auto be = BedrockExporter(bb_model, af.get_output_motion_frames());
+  auto of = af.get_animation();
+  auto be = BedrockExporter(bb_model, of);
 
   ExporterConfig ec = {
       60,
@@ -92,7 +94,7 @@ TEST(Manual, Very_Curved_Line) {
   BvhImporter bvh_importer(DATA_PATH + "very_curved_line.bvh");
 
   auto bvh_model = bvh_importer.get_model();
-  auto bvh_animation = bvh_importer.get_animation_frames();
+  auto bvh_animation = bvh_importer.get_animation();
 
   BBImporter bb_importer(DATA_PATH + "curved_line.bbmodel");
 
@@ -114,11 +116,12 @@ TEST(Manual, Very_Curved_Line) {
 
   auto af = ArmatureFormatAdapter(config);
 
-  for (auto &frame : bvh_animation) {
+  for (auto &frame : bvh_animation.frames) {
     af.push_motion_frame(frame);
   }
 
-  auto be = BedrockExporter(bb_model, af.get_output_motion_frames());
+  auto of = af.get_animation();
+  auto be = BedrockExporter(bb_model, of);
 
   ExporterConfig ec = {
       60,
@@ -131,7 +134,7 @@ TEST(Manual, Curved_Line_M) {
   BvhImporter bvh_importer(DATA_PATH + "curved_line.bvh");
 
   auto bvh_model = bvh_importer.get_model();
-  auto bvh_animation = bvh_importer.get_animation_frames();
+  auto bvh_animation = bvh_importer.get_animation();
 
   BBImporter bb_importer(DATA_PATH + "curved_line_missing_c.bbmodel");
 
@@ -152,11 +155,12 @@ TEST(Manual, Curved_Line_M) {
 
   auto af = ArmatureFormatAdapter(config);
 
-  for (auto &frame : bvh_animation) {
+  for (auto &frame : bvh_animation.frames) {
     af.push_motion_frame(frame);
   }
 
-  auto be = BedrockExporter(bb_model, af.get_output_motion_frames());
+  auto of = af.get_animation();
+  auto be = BedrockExporter(bb_model, of);
 
   ExporterConfig ec = {
       60,
@@ -169,7 +173,7 @@ TEST(Manual, Very_Curved_Line_M) {
   BvhImporter bvh_importer(DATA_PATH + "very_curved_line.bvh");
 
   auto bvh_model = bvh_importer.get_model();
-  auto bvh_animation = bvh_importer.get_animation_frames();
+  auto bvh_animation = bvh_importer.get_animation();
 
   BBImporter bb_importer(DATA_PATH + "curved_line_missing_c.bbmodel");
 
@@ -190,11 +194,12 @@ TEST(Manual, Very_Curved_Line_M) {
 
   auto af = ArmatureFormatAdapter(config);
 
-  for (auto &frame : bvh_animation) {
+  for (auto &frame : bvh_animation.frames) {
     af.push_motion_frame(frame);
   }
 
-  auto be = BedrockExporter(bb_model, af.get_output_motion_frames());
+  auto of = af.get_animation();
+  auto be = BedrockExporter(bb_model, of);
 
   ExporterConfig ec = {
       60,

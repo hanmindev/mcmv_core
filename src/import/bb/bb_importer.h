@@ -11,10 +11,8 @@ class BBImporter : IArmatureImporter {
   
   ~BBImporter();
 
-  ~BBImporter();
-
-  vector<Joint> get_model() override;
-  vector<JointMotion *> get_animation_frames() override;
+  Model get_model() override;
+  Animation get_animation() override;
 
  private:
   BBParser *bb_parser;
