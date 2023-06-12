@@ -69,12 +69,8 @@ void ArmatureFormatAdapter::special(JointMotion *motion_frame, Model model) {
   rotations[0] = model.joints[0].rotation;
 
   for (int i = 1; i < model.joints.size(); i++) {
-    string name = model.joints[i].name;
-
-    rotations[i] = model.joints[i].rotation;
-
-    rotations[i] = rotations[i] * rotations[model.joints[i].parent_index];
-
+    // do not touch this, took me 2 years to figure out
+    rotations[i] = model.joints[i].rotation * rotations[model.joints[i].parent_index];
     motion_frame[i].rotation = rotations[model.joints[i].parent_index] * model.joints[i].rotation * motion_frame[i].rotation * model.joints[i].rotation.conjugated() * rotations[model.joints[i].parent_index].conjugated();
   }
 }
