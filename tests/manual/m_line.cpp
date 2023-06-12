@@ -87,3 +87,118 @@ TEST(Manual, Forked_Line) {
 
   be.export_armature_animation(DATA_PATH, "forked_line", ec);
 }
+
+TEST(Manual, Very_Curved_Line) {
+  BvhImporter bvh_importer(DATA_PATH + "very_curved_line.bvh");
+
+  auto bvh_model = bvh_importer.get_model();
+  auto bvh_animation = bvh_importer.get_animation_frames();
+
+  BBImporter bb_importer(DATA_PATH + "curved_line.bbmodel");
+
+  auto bb_model = bb_importer.get_model();
+
+  ProcessorConfig config = {
+      bvh_model,
+      bb_model,
+      build_joint_map(bvh_model, bb_model, {
+          {"a", "a"},
+          {"b", "b"},
+          {"c", "c"},
+          {"d", "d"},
+          {"e", "e"},
+      }),
+      true,
+      false
+  };
+
+  auto af = ArmatureFormatAdapter(config);
+
+  for (auto &frame : bvh_animation) {
+    af.push_motion_frame(frame);
+  }
+
+  auto be = BedrockExporter(bb_model, af.get_output_motion_frames());
+
+  ExporterConfig ec = {
+      60,
+  };
+
+  be.export_armature_animation(DATA_PATH, "very_curved_line", ec);
+}
+
+TEST(Manual, Curved_Line_M) {
+  BvhImporter bvh_importer(DATA_PATH + "curved_line.bvh");
+
+  auto bvh_model = bvh_importer.get_model();
+  auto bvh_animation = bvh_importer.get_animation_frames();
+
+  BBImporter bb_importer(DATA_PATH + "curved_line_missing_c.bbmodel");
+
+  auto bb_model = bb_importer.get_model();
+
+  ProcessorConfig config = {
+      bvh_model,
+      bb_model,
+      build_joint_map(bvh_model, bb_model, {
+          {"a", "a"},
+          {"b", "b"},
+          {"d", "d"},
+          {"e", "e"},
+      }),
+      true,
+      false
+  };
+
+  auto af = ArmatureFormatAdapter(config);
+
+  for (auto &frame : bvh_animation) {
+    af.push_motion_frame(frame);
+  }
+
+  auto be = BedrockExporter(bb_model, af.get_output_motion_frames());
+
+  ExporterConfig ec = {
+      60,
+  };
+
+  be.export_armature_animation(DATA_PATH, "curved_line_missing_c", ec);
+}
+
+TEST(Manual, Very_Curved_Line_M) {
+  BvhImporter bvh_importer(DATA_PATH + "very_curved_line.bvh");
+
+  auto bvh_model = bvh_importer.get_model();
+  auto bvh_animation = bvh_importer.get_animation_frames();
+
+  BBImporter bb_importer(DATA_PATH + "curved_line_missing_c.bbmodel");
+
+  auto bb_model = bb_importer.get_model();
+
+  ProcessorConfig config = {
+      bvh_model,
+      bb_model,
+      build_joint_map(bvh_model, bb_model, {
+          {"a", "a"},
+          {"b", "b"},
+          {"d", "d"},
+          {"e", "e"},
+      }),
+      true,
+      false
+  };
+
+  auto af = ArmatureFormatAdapter(config);
+
+  for (auto &frame : bvh_animation) {
+    af.push_motion_frame(frame);
+  }
+
+  auto be = BedrockExporter(bb_model, af.get_output_motion_frames());
+
+  ExporterConfig ec = {
+      60,
+  };
+
+  be.export_armature_animation(DATA_PATH, "very_curved_line_missing_c", ec);
+}
