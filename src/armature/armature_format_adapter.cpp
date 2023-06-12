@@ -42,10 +42,10 @@ ArmatureFormatAdapter::ArmatureFormatAdapter(ProcessorConfig &config) {
 
 ArmatureFormatAdapter::~ArmatureFormatAdapter() {
   for (auto &motion_frame : this->motion_frames) {
-    delete motion_frame;
+    delete[] motion_frame;
   }
   for (auto &motion_frame : this->output_motion_frames) {
-    delete motion_frame;
+    delete[] motion_frame;
   }
 }
 void ArmatureFormatAdapter::push_motion_frame(JointMotion *motion_frame) {

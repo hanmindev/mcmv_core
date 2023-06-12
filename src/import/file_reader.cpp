@@ -17,6 +17,7 @@ FileReader::FileReader(string path) {
     this->path = std::move(path);
     this->buffer_index = BUFFER_SIZE;
     this->remaining_buffer = -1;
+
     if (!this->open_file(this->path)) {
         throw std::runtime_error("Could not open file " + this->path);
     }
