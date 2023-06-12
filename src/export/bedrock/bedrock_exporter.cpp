@@ -11,14 +11,14 @@ void BedrockExporter::export_armature_animation(string path, string name, Export
   json &bones = j["animations"]["animation."s + name + ".new"s]["bones"];
   bones = {};
 
-  for (auto &joint : joints) {
+  for (auto &joint : model.joints) {
     json bone;
 
     json rotation;
     json position;
 
-    for (int i = 0; i < motion_frames.size(); i++) {
-      auto &motion_frame = motion_frames[i][joint.index];
+    for (int i = 0; i < animation_frames.frames.size(); i++) {
+      auto &motion_frame = animation_frames.frames[i][joint.index];
       string frame_name = std::to_string(i / config.fps);
       Euler e = Euler(Order::zyx, motion_frame.rotation);
 
@@ -44,7 +44,7 @@ void BedrockExporter::export_armature_animation(string path, string name, Export
   o.close();
 }
 
-BedrockExporter::BedrockExporter(vector<Joint> joints, vector<JointMotion *> motion_frames) {
-  this->joints = std::move(joints);
-  this->motion_frames = std::move(motion_frames);
+BedrockExporter::BedrockExporter(Model &model, Animation &animation_frames) {
+  this->model = std::move(model);
+  this->animation_frames = std::move(animation_frames);
 }

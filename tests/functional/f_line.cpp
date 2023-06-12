@@ -57,9 +57,9 @@ TEST(Functional, Hexagon_Inverse) {
   }
   af.push_motion_frame(motion_frame);
 
-  auto output_frames = af.get_output_motion_frames();
+  auto output_frames = af.get_animation();
 
-  auto output_frame = output_frames[0];
+  auto output_frame = output_frames.frames[0];
 
   for (int j = 0; j < joint_count; j++) {
     auto output_joint = output_frame[j];

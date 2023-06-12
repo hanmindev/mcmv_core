@@ -8,12 +8,12 @@ using namespace std;
 
 class BedrockExporter : public IArmatureAnimationExporter {
  public:
-  BedrockExporter(vector<Joint> joints, vector<JointMotion *> motion_frames);
+  BedrockExporter(Model &model, Animation &animation_frames);
 
   void export_armature_animation(string path, string name, ExporterConfig config) override;
 
-  vector<Joint> joints;
-  vector<JointMotion *> motion_frames;
+  Model model;
+  Animation animation_frames;
 };
 
 #endif //MCMV_CORE_SRC_OUTPUT_BEDROCK_BEDROCK_EXPORTER_H_
