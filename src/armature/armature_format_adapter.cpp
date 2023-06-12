@@ -64,6 +64,21 @@ void ArmatureFormatAdapter::globalize_motion_frame(JointMotion *motion_frame, Mo
   }
 }
 
+void ArmatureFormatAdapter::special(JointMotion *motion_frame, Model model) {
+  vector<Quaternion> rotations(model.joints.size());
+  rotations[0] = model.joints[0].rotation;
+
+  for (int i = 1; i < model.joints.size(); i++) {
+    string name = model.joints[i].name;
+
+    rotations[i] = model.joints[i].rotation;
+
+    rotations[i] = rotations[i] * rotations[model.joints[i].parent_index];
+
+    motion_frame[i].rotation = rotations[model.joints[i].parent_index] * model.joints[i].rotation * motion_frame[i].rotation * model.joints[i].rotation.conjugated() * rotations[model.joints[i].parent_index].conjugated();
+  }
+}
+
 void ArmatureFormatAdapter::localize_motion_frame(JointMotion *motion_frame, Model model) {
   // we can do it in one pass because the input model are topologically sorted
   for (int i = model.joints.size() - 1; i > 0; i--) {
@@ -88,8 +103,10 @@ void ArmatureFormatAdapter::process_motion_frame(int index) {
   JointMotion *output_motion_frame = this->output_animation.frames[index];
   globalize_motion_frame(motion_frame, this->input_model);
   copy_motion_frame(motion_frame, output_motion_frame);
+
   if (this->output_as_local) {
     localize_motion_frame(output_motion_frame, this->output_model);
+    special(output_motion_frame, this->output_model);
   }
   if (this->free_frame_after_use) {
     delete motion_frame;
