@@ -2,9 +2,9 @@
 #include "bvh_importer.h"
 
 BvhImporter::BvhImporter(const string &file_name) {
-  this->bvh_file_reader = new FileReader(file_name);
-  this->bvh_lexer = new BvhLexer(this->bvh_file_reader);
-  this->bvh_parser = new BvhParser(this->bvh_lexer);
+  auto file_reader = make_unique<FileReader>(file_name);
+  auto bvh_lexer = make_unique<BvhLexer>(std::move(file_reader));
+  this->bvh_parser = make_unique<BvhParser>(std::move(bvh_lexer));
 }
 Model BvhImporter::get_model() {
   return Model {
@@ -16,9 +16,4 @@ Animation BvhImporter::get_animation() {
       bvh_parser->get_animation_frames(),
       20
   };
-}
-BvhImporter::~BvhImporter() {
-  delete this->bvh_file_reader;
-  delete this->bvh_lexer;
-  delete this->bvh_parser;
 }

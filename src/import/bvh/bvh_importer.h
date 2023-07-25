@@ -7,15 +7,12 @@
 class BvhImporter : IArmatureImporter {
  public:
   explicit BvhImporter(const string &file_name);
-  ~BvhImporter();
 
   Model get_model() override;
   Animation get_animation() override;
 
  private:
-  FileReader *bvh_file_reader;
-  BvhLexer *bvh_lexer;
-  BvhParser *bvh_parser;
+  unique_ptr<BvhParser> bvh_parser;
 };
 
 #endif //MCMV_CORE_SRC_IMPORT_BVH_BVH_IMPORTER_H_

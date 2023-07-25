@@ -1,9 +1,8 @@
 #include "bvh_lexer.h"
 
-BvhLexer::BvhLexer(FileReader *file_reader) {
-  this->file_reader = file_reader;
+BvhLexer::BvhLexer(unique_ptr<FileReader> file_reader) {
+  this->file_reader = std::move(file_reader);
   this->last_char = this->file_reader->read_char();
-
 }
 
 void BvhLexer::read_char() {
