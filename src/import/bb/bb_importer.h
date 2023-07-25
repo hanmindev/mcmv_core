@@ -8,14 +8,12 @@ class BBImporter : IArmatureImporter {
  public:
   explicit BBImporter(const string &file_name);
   explicit BBImporter(const string &file_name, string root_name);
-  
-  ~BBImporter();
 
   Model get_model() override;
   Animation get_animation() override;
 
  private:
-  BBParser *bb_parser;
+  unique_ptr<BBParser> bb_parser;
 };
 
 #endif //MCMV_CORE_SRC_IMPORT_BB_BB_IMPORTER_H_
