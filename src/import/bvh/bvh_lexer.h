@@ -1,6 +1,7 @@
 #ifndef MCMV_CORE_SRC_IMPORT_BVH_BVH_LEXER_H_
 #define MCMV_CORE_SRC_IMPORT_BVH_BVH_LEXER_H_
 
+#include <memory>
 #include "../file_reader.h"
 
 enum BvhToken {
@@ -31,12 +32,12 @@ enum BvhToken {
 
 class BvhLexer {
  public:
-  explicit BvhLexer(FileReader *file_reader);
+  explicit BvhLexer(unique_ptr<FileReader> file_reader);
   BvhToken get_token();
   string get_string();
 
  private:
-  FileReader *file_reader;
+  unique_ptr<FileReader> file_reader;
   char last_char = ' ';
   string current_string;
 

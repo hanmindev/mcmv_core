@@ -11,8 +11,8 @@ const map<string, Order> order_map = {
     {"ZYX", Order::zyx}
 };
 
-BvhParser::BvhParser(BvhLexer *lexer) {
-  this->lexer = lexer;
+BvhParser::BvhParser(unique_ptr<BvhLexer> lexer) {
+  this->lexer = std::move(lexer);
   parse();
 }
 
