@@ -46,6 +46,8 @@ TEST(Manual, Curved_Line) {
   };
 
   be.export_armature_animation(DATA_PATH, "curved_line", ec);
+
+  SUCCEED();
 }
 
 TEST(Manual, Forked_Line) {
@@ -88,6 +90,8 @@ TEST(Manual, Forked_Line) {
   };
 
   be.export_armature_animation(DATA_PATH, "forked_line", ec);
+
+  SUCCEED();
 }
 
 TEST(Manual, Very_Curved_Line) {
@@ -128,6 +132,8 @@ TEST(Manual, Very_Curved_Line) {
   };
 
   be.export_armature_animation(DATA_PATH, "very_curved_line", ec);
+
+  SUCCEED();
 }
 
 TEST(Manual, Curved_Line_M) {
@@ -167,6 +173,8 @@ TEST(Manual, Curved_Line_M) {
   };
 
   be.export_armature_animation(DATA_PATH, "curved_line_missing_c", ec);
+
+  SUCCEED();
 }
 
 TEST(Manual, Very_Curved_Line_M) {
@@ -206,4 +214,6 @@ TEST(Manual, Very_Curved_Line_M) {
   };
 
   be.export_armature_animation(DATA_PATH, "very_curved_line_missing_c", ec);
+
+  SUCCEED();
 }
