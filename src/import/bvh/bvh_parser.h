@@ -16,7 +16,7 @@ enum class ChannelOrder {
 
 class BvhParser {
  public:
-  explicit BvhParser(BvhLexer *lexer);
+  explicit BvhParser(unique_ptr<BvhLexer> lexer);
 
   vector<Joint> get_model();
 
@@ -29,7 +29,7 @@ class BvhParser {
   string current_string;
   string next_string;
 
-  BvhLexer *lexer;
+  unique_ptr<BvhLexer> lexer;
 
   vector<vector<ChannelOrder>> order;
 
