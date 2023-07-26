@@ -52,7 +52,7 @@ TEST(Functional, Hexagon_Inverse) {
 
   auto *motion_frame = new JointMotion[7];
   for (int j = 0; j < joint_count; j++) {
-    motion_frame[j].offset = Vector3(0, 0, 0);
+    motion_frame[j].offset = Vector3(0, 0, 1);
     motion_frame[j].rotation = Euler(Order::xyz, 0, 0, 60).to_quaternion();
   }
   af.push_motion_frame(motion_frame);
