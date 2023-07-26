@@ -1,0 +1,34 @@
+HIERARCHY
+ROOT a
+{
+	OFFSET 0.0 0.0 0.0
+	CHANNELS 6 Xposition Yposition Zposition Xrotation Yrotation Zrotation
+	JOINT b
+	{
+		OFFSET 1.0 0.0 0.0
+		CHANNELS 6 Xposition Yposition Zposition Xrotation Yrotation Zrotation
+		JOINT c
+		{
+			OFFSET 1.0 0.0 0.0
+			CHANNELS 6 Xposition Yposition Zposition Xrotation Yrotation Zrotation
+			JOINT d
+			{
+				OFFSET 1.0 0.0 0.0
+				CHANNELS 6 Xposition Yposition Zposition Xrotation Yrotation Zrotation
+				JOINT e
+				{
+					OFFSET 1.0 0.0 0.0
+					CHANNELS 6 Xposition Yposition Zposition Xrotation Yrotation Zrotation
+					End Site
+					{
+						OFFSET 1.0 0.0 0.0
+					}
+				}
+			}
+		}
+    }
+}
+MOTION
+Frames: 1
+Frame Time: 0.05
+0.0 0.0 0.0 0.0 0.0 20.0 1.0 0.0 0.0 0.0 20.0 0.0 1.0 0.0 0.0 20.0 0.0 0.0 1.0 0.0 0.0 0.0 20.0 0.0 1.0 0.0 0.0 0.0 0.0 20.0
