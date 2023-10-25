@@ -83,7 +83,9 @@ add_executable(mcmv_core src/main.cpp ${SOURCE_FILES} resources/mcmv_core.rc) # 
 target_link_libraries(mcmv_core PRIVATE nlohmann_json::nlohmann_json pthread)
 
 # set compiler library linker to MultiThreadedDLL
-target_compile_options(mcmv_core PRIVATE "/MD")
+if(WIN32)
+  target_compile_options(mcmv_core PRIVATE "/MD")
+endif(WIN32)
 
 enable_testing()
 
@@ -152,7 +154,9 @@ target_include_directories(mcmv_gui PRIVATE libs/imguifiledialog)  # Include the
 
 
 # set compiler library linker to MultiThreadedDLL
-target_compile_options(mcmv_gui PRIVATE "/MD")
+if(WIN32)
+  target_compile_options(mcmv_gui PRIVATE "/MD")
+endif(WIN32)
 
 # link all libraries to target
 target_link_libraries(mcmv_gui PRIVATE nlohmann_json::nlohmann_json pthread glfw ${GLFW_LIBRARIES} OpenGL::GL)
