@@ -19,19 +19,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    with:
-      fetch-depth: 0
-      repository: openrndr/openrndr
-      path: ./openrndr
-      ref: master
-
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y mesa-utils xvfb
-        xvfb-run glxinfo 
-
-    
     
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
