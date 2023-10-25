@@ -5,26 +5,17 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
-# file(GLOB folder_contents "${CMAKE_SOURCE_DIR}/libs/imgui/*")
 
-# Check if the folder is empty
-if(NOT folder_contents)
-  message(STATUS "Downloading required libraries...")
-  file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/imgui)
-  file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/imguifiledialog)
-  file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/glfw)
-  if (WIN32)
-    message(STATUS "BUILD WIN32")
-    execute_process(COMMAND populate_libs.bat WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/scripts ERROR_VARIABLE CMD_ERROR)
-    message(STATUS CMD_ERROR)
-  else()
-    message(STATUS "BUILD LINUX")
-    execute_process(COMMAND populate_libs.sh WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/scripts ERROR_VARIABLE CMD_ERROR)
-    message(STATUS CMD_ERROR)
-  endif (WIN32)
-else()
-    message(STATUS "LIBS folder is Populated!, skipping download.")
-endif()
+
+message(STATUS "Downloading required libraries...")
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/imgui)
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/imguifiledialog)
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/glfw)
+
+execute_process(COMMAND git clone "https://github.com/ocornut/imgui.git" ${CMAKE_SOURCE_DIR}/libs/imgui)
+execute_process(COMMAND git clone "https://github.com/aiekick/ImGuiFileDialog.git" ${CMAKE_SOURCE_DIR}/libs/imguifiledialog)
+execute_process(COMMAND git clone "https://github.com/glfw/glfw.git" ${CMAKE_SOURCE_DIR}/libs/glfw)
+
 
 
 # include directories for imgui and glfw
