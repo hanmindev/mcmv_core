@@ -1,6 +1,4 @@
 #!/bin/bash
-
-@echo off
 cd ../libs
 
 mkdir imgui imguifiledialog glfw
