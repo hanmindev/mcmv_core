@@ -1,4 +1,6 @@
 #include "bvh_lexer.h"
+#include <stdio.h>
+#include <regex>
 
 BvhLexer::BvhLexer(unique_ptr<FileReader> file_reader) {
   this->file_reader = std::move(file_reader);
@@ -7,7 +9,9 @@ BvhLexer::BvhLexer(unique_ptr<FileReader> file_reader) {
 
 void BvhLexer::read_char() {
   this->last_char = this->file_reader->read_char();
+  
 }
+
 
 BvhToken BvhLexer::get_token() {
   while (isspace(this->last_char)) {
@@ -47,7 +51,8 @@ BvhToken BvhLexer::get_token() {
       return tok_string;
     }
   }
-
+  
+  //Number parser now supports scientific notation (e.g. 12.345e-10)
   if (isdigit(this->last_char) || this->last_char == '.' || this->last_char == '-') {
     if (this->last_char == '-') {
       this->current_string = "-";
@@ -55,18 +60,20 @@ BvhToken BvhLexer::get_token() {
     } else {
       this->current_string = "";
     }
-    while (isdigit(this->last_char)) {
+    while (isdigit(this->last_char) || this->last_char == 'e' || this->last_char == '-') {
       this->current_string += this->last_char;
       this->read_char();
     }
     if (this->last_char == '.') {
       this->current_string += this->last_char;
       this->read_char();
-      while (isdigit(this->last_char)) {
+      while (isdigit(this->last_char) || this->last_char == 'e' || this->last_char == '-') {
         this->current_string += this->last_char;
         this->read_char();
       }
     }
+
+    //regex check
     return tok_number;
   }
   if (this->last_char == EOF) {

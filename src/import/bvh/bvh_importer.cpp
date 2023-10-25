@@ -8,12 +8,12 @@ BvhImporter::BvhImporter(const string &file_name) {
 }
 Model BvhImporter::get_model() {
   return Model {
-      bvh_parser->get_model()
+    bvh_parser->get_model()
   };
 }
 Animation BvhImporter::get_animation() {
   return Animation {
-      bvh_parser->get_animation_frames(),
-      20
+    bvh_parser->get_animation_frames(),
+    bvh_parser->frame_rate
   };
 }

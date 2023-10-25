@@ -179,6 +179,7 @@ void BvhParser::parse_frame() {
       if (this->current_token != tok_number) {
         throw std::runtime_error("Expected Number");
       }
+
       float value = std::stof(this->current_string);
 
       if (order[i][j] == ChannelOrder::Xposition) {
@@ -240,7 +241,14 @@ void BvhParser::parse_motion() {
   if (this->current_token != tok_number) {
     throw std::runtime_error("Expected Number");
   }
+
   // TODO: handle frame time to get frame rate
+  // This seems to work just fine
+
+  double frameTime = std::stod(this->current_string);
+  // ceil (1s / frameTime) = fps
+  frame_rate = (float)ceil(1 / frameTime);
+
 
   for (int i = 0; i < frame_count; i++) {
     parse_frame();

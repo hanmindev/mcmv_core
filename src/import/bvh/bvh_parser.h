@@ -21,6 +21,7 @@ class BvhParser {
   vector<Joint> get_model();
 
   vector<JointMotion *> get_animation_frames();
+  float frame_rate;
 
  private:
   BvhToken current_token = tok_eof;
@@ -42,7 +43,7 @@ class BvhParser {
   vector<Joint> model;
   vector<JointMotion *> animation_frames;
 
-  void parse_model();
+  void parse_model(); 
   void handle_root();
   void handle_joint(int parent_index);
   void parse_motion();

@@ -27,8 +27,10 @@ void BedrockExporter::export_armature_animation(string path, string name, Export
       position[frame_name] = {-motion_frame.offset.x, motion_frame.offset.y, motion_frame.offset.z};
     }
 
-    bone["rotation"] = rotation;
-    bone["position"] = position;
+    if(config.exportRotation)
+      bone["rotation"] = rotation;
+    if(config.exportPosition)
+      bone["position"] = position;
 
     bones[joint.name] = bone;
   }

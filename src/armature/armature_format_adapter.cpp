@@ -6,6 +6,8 @@ unordered_map<int, int> build_joint_map(Model &input_model,
                                         unordered_map<string, string> string_joint_map) {
   unordered_map<int, int> joint_map;
   // not ideal but it works
+
+  // TODO: allow for unbound bones
   for (int i = 0; i < output_model.joints.size(); i++) {
     auto &output_joint = output_model.joints[i];
     auto input_joint_i = string_joint_map.find(output_joint.name);

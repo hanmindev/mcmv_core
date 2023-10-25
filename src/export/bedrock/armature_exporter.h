@@ -5,6 +5,8 @@ using namespace std;
 
 struct ExporterConfig {
   float fps;
+  bool exportRotation = true;
+  bool exportPosition = true;
 };
 
 class IArmatureModelExporter {
