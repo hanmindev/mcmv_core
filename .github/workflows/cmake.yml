@@ -19,17 +19,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
-    # I didnt expect this to build on linux but its being a pain
-    - name: Run headless test
-        uses: coactions/setup-xvfb@v1
-
-    - uses: openrndr/setup-opengl@v1.1
+    with:
+          fetch-depth: 0
+          repository: openrndr/openrndr
+          path: ./openrndr
+          ref: master
 
     - name: Install dependencies
       run: |
-            sudo apt update
-            sudo apt install xorg-dev libglu1-mesa-dev xvfb 
+        sudo apt-get update
+        sudo apt-get install -y mesa-utils xvfb
+        xvfb-run glxinfo 
 
     
     
