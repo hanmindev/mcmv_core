@@ -6,8 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
 
-
 message(STATUS "Downloading required libraries...")
+
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/libs)
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/imgui)
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/imguifiledialog)
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/glfw)
