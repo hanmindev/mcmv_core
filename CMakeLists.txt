@@ -9,7 +9,10 @@ file(GLOB folder_contents "${CMAKE_SOURCE_DIR}/libs/imgui/*")
 
 # Check if the folder is empty
 if(NOT folder_contents)
-    message(STATUS "Downloading required libraries...")
+  message(STATUS "Downloading required libraries...")
+  file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/imgui)
+  file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/imguifiledialog)
+  file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/libs/glfw)
   if (WIN32)
     execute_process(COMMAND populate_libs.bat WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/scripts)
   endif (WIN32)

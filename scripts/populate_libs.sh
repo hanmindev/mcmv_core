@@ -1,7 +1,6 @@
 #!/bin/bash
 cd ../libs
 
-mkdir imgui imguifiledialog glfw
 
 git clone https://github.com/ocornut/imgui.git imgui
 
