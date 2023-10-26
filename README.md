@@ -1,9 +1,10 @@
-# MCMV Core
+# MCMV GUI
+I have created a Gui that is more user friendly than using a command line,
+the gui is implemented using ImGui with a GLFW backend, using a file dialog addon to allow for ease of file browsing.
 
-This is a C++ implementation of MCMV, which should be much faster thanks to the compiled nature of C++, as well as this implementation using multithreading whenever possible.
+The Cmake file was edited to allow for compiling both mcmv_core and mcmv_gui separately or together.
 
-The project is currently in early development, if you would like a working version, please check out the Python version [here](https://github.com/hanmangokiwi/mcmv)
-
+I still have a few remaining features to implement alongside helping with the command line tool.
 
 ## Build
 
